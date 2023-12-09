@@ -1,0 +1,14 @@
+
+defaults
+  mode http
+  timeout client 15s
+  timeout connect 10s
+  timeout server 15s
+  timeout http-request 10s
+frontend clickviral-tech-frontend
+    bind *:80 ssl crt /etc/letsencrypt/live/www.geomay.tech/www.geomay.tech.pem
+    default_backend clickviral-tech-backend
+backend clickviral-tech-backend
+    balance roundrobin
+    server 151666-web-01 54.237.77.167:80 check
+    server 151666-web-02 100.27.3.4:80 check
