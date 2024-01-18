@@ -35,3 +35,4 @@ def recurse(subreddit, hot_list=[], next_page=None, count=0):
         return recurse(subreddit, hot_list, next_page, count)
     else:
         return hot_list
+

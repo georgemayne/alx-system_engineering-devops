@@ -29,3 +29,4 @@ def number_of_subscribers(subreddit):
     page_data = pages[0]['data']
     # return number of subreddit subs
     return page_data['subreddit_subscribers']
+
