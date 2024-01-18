@@ -14,7 +14,7 @@ def top_ten(subreddit):
     url = 'https://www.reddit.com/r/{}/hot.json?limit=10'.format(subreddit)
 
     # custom user-agent avoids request limit
-    headers = {'User-Agent': user_agent}
+    headers = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'}
 
     r = requests.get(url, headers=headers, allow_redirects=False)
 

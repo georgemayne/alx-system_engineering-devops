@@ -14,7 +14,7 @@ def recurse(subreddit, hot_list=[], next_page=None, count=0):
     # if page specified, pass as parameter
     if next_page:
         url += '?after={}'.format(next_page)
-    headers = {'User-Agent': user_agent}
+    headers = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'}
 
     r = requests.get(url, headers=headers, allow_redirects=False)
 
