@@ -1,22 +1,39 @@
 #!/usr/bin/python3
-"""Function to print hot posts on a given Reddit subreddit."""
+"""a function that queries the Reddit API
+"""
+
 import requests
 
 
 def top_ten(subreddit):
-    """Print the titles of the 10 hottest posts on a given subreddit."""
-    url = "https://www.reddit.com/r/{}/hot/.json".format(subreddit)
-    headers = {
-        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36"
-        "(KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+    """
+    Function that queries the Reddit API and
+    prints the titles of the first 10 hot posts
+    listed for a given subreddit.
+    """
+    if not isinstance(subreddit, str):
+        return (0)
+    user_agent = {
+        'User-agent': (
+            'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36'
+            '(KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+        )
     }
-    params = {
-        "limit": 10
-    }
-    response = requests.get(url, headers=headers, params=params,
-                            allow_redirects=False)
-    if response.status_code == 404:
-        print("None")
-        return
-    results = response.json().get("data")
-    [print(c.get("data").get("title")) for c in results.get("children")]
+
+    url = 'https://www.reddit.com/r/' + subreddit + '/hot.json?limit=10'
+    try:
+        response = requests.get(url, headers=user_agent)
+        response.raise_for_status()
+        data = response.json()
+        posts = data.get('data', {}).get('children', [])
+
+        if not posts:
+            print("No hot posts found for subreddit '{}'.".format(subreddit))
+            return
+
+        for post in posts:
+            title = post['data']['title']
+            print(title)
+
+    except requests.exceptions.RequestException as req_exc:
+        print(None)
