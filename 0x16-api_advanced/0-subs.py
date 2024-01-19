@@ -1,17 +1,40 @@
 #!/usr/bin/python3
-"""Function to query subscribers on a given Reddit subreddit."""
+"""
+the number of subscribers (not active users, total subscribers)
+for a given subreddit.
+"""
+
 import requests
 
 
 def number_of_subscribers(subreddit):
-    """Return the total number of subscribers on a given subreddit."""
-    url = "https://www.reddit.com/r/{}/about.json".format(subreddit)
-    headers = {
-         "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36"
-         "(KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+    """function that queries the Reddit API and returns
+    the number of subscribers (not active users,
+    total subscribers) for a given subreddit.
+    """
+    if not isinstance(subreddit, str):
+        return (0)
+
+    user_agent = {
+        'User-agent': (
+            'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36'
+            '(KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+        )
     }
-    response = requests.get(url, headers=headers, allow_redirects=False)
-    if response.status_code == 404:
-        return 0
-    results = response.json().get("data")
-    return results.get("subscribers")
+
+    url = 'https://www.reddit.com/r/{}/about.json'.format(subreddit)
+    try:
+        response = requests.get(url, headers=user_agent)
+        response.raise_for_status()
+
+        # Check if the subreddit exists
+        if response.status_code == 404:
+            print(f"Subreddit '{subreddit}' does not exist.")
+            return (0)
+
+        results = response.json()
+        return results.get('data', {}).get('subscribers', 0)
+
+    except requests.exceptions.RequestException as req_exc:
+        print(f'Request error occurred: {req_exc}')
+        return (0)
