@@ -7,7 +7,8 @@ def top_ten(subreddit):
     """Print the titles of the 10 hottest posts on a given subreddit."""
     url = "https://www.reddit.com/r/{}/hot/.json".format(subreddit)
     headers = {
-        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36"
+        "(KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
     }
     params = {
         "limit": 10
@@ -19,3 +20,4 @@ def top_ten(subreddit):
         return
     results = response.json().get("data")
     [print(c.get("data").get("title")) for c in results.get("children")]
+
