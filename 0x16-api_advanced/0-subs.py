@@ -1,32 +1,33 @@
 #!/usr/bin/python3
-"""Queries Reddit API to get subreddit sub count
+"""
+the number of subscribers (not active users, total subscribers)
+for a given subreddit.
 """
 
 import requests
 
 
 def number_of_subscribers(subreddit):
-    """Request number of subscribers of subreddit
-    from Reddit API
+    """function that queries the Reddit API and returns
+    the number of subscribers (not active users,
+    total subscribers) for a given subreddit.
     """
-    # set custom user-agent
-    user_agent = '0x16-api_advanced-Osaclay'
-    url = 'https://www.reddit.com/r/{}.json'.format(subreddit)
+    if not isinstance(subreddit, str):
+        return (0)
 
-    # custom user-agent avoids request limit
-    headers = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'}
+    user_agent = {
+        'User-agent': (
+            'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+        )
+    }
 
-    r = requests.get(url, headers=headers, allow_redirects=False)
+    url = 'https://www.reddit.com/r/{}/about.json'.format(subreddit)
+    try:
+        response = requests.get(url, headers=user_agent)
+        response.raise_for_status()
+        results = response.json()
+        return results.get('data', {}).get('subscribers', 0)
 
-    if r.status_code != 200:
-        return 0
-
-    # load response unit from json
-    data = r.json()['data']
-    # extract list of pages
-    pages = data['children']
-    # extract data from first page
-    page_data = pages[0]['data']
-    # return number of subreddit subs
-    return page_data['subreddit_subscribers']
+    except requests.exceptions.RequestException as req_exc:
+        return (0)
 
